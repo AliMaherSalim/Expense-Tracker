@@ -1,53 +1,50 @@
-# Simple Expense Tracker App
+# React + TypeScript + Vite
 
-## Project Overview
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-This is a simple expense tracker application built with React.js that allows users to manage their expenses effectively. Users can add expenses with a name, amount, and category, view a list of expenses with the total amount displayed, and delete individual expenses from the list. The application is designed to be mobile-friendly and provides basic form validation.
+Currently, two official plugins are available:
 
-## Tech Stack
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- **Frontend:** React.js (Functional Components + Hooks)
-- **CSS Framework:** Tailwind CSS
-- **State Management:** Local state (with optional localStorage for persistence)
-- **Form Validation:** Yup
-- **Routing:** React Router (for page navigation)
+## Expanding the ESLint configuration
 
-## Installation Instructions
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-To clone and run the project locally, follow these instructions:
+- Configure the top-level `parserOptions` property like this:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/expense-tracker.git
-   ```
-1. **Navigate to the project folder:**
-   ```bash
-   cd expense-tracker
-   ```
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-1. **Run the app:**
-   ```bash
-   npm run dev
-   ```
-   The app will be running on http://localhost:5173/
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-## Usage Guide
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-**Adding an Expense:**
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-Fill in the form with the expense name, amount, and category.
-Click on the "Add Expense" button to save the expense.
-
-**Viewing Expenses:**
-
-The list of expenses will be displayed along with the total amount at the top.
-
-**Deleting an Expense:**
-
-Click the delete button next to an expense to remove it from the list.
-
-**Category Filtering:**
-Use the dropdown to filter expenses by category.
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
